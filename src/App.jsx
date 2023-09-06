@@ -3,7 +3,8 @@ import "./App.css";
 
 function App() {
   const [todos, setTodos] = useState([]);
-  const [inputVal, setInputVal] = useState(" ");
+  const [isChecked,SetIsChecked] = useState(false);
+  const [inputVal, setInputVal] = useState("");
 
   function writeTodo (e){
     setInputVal(e.target.value);
@@ -13,7 +14,6 @@ function App() {
       setTodos((prevTodos) => [...prevTodos,inputVal]);
       setInputVal("");
     }
-    console.log(inputVal);
   }
   function deleteTodo(index){
     setTodos(prevTodos => prevTodos.filter((prevTodo,prevTodoIndex)=>{
@@ -21,11 +21,16 @@ function App() {
     }))
   }
 
+  function clickHandler(){
+    SetIsChecked(!isChecked);
+    console.log(isChecked);
+  }
+
   return (
     <main>
       <h1>Todo List Using React</h1>
       <InputContainer inputVal={inputVal} addTodo={addTodo} writeTodo={writeTodo}></InputContainer>
-      <TodoContainer todos={todos} deleteTodo={deleteTodo}></TodoContainer>
+      <TodoContainer todos={todos} deleteTodo={deleteTodo} clickHandler={clickHandler}></TodoContainer>
     </main>
   );
 }
@@ -43,13 +48,14 @@ function InputContainer({inputVal,addTodo,writeTodo}){
   );
 }
 
-function TodoContainer({todos,deleteTodo}){
+function TodoContainer({todos,deleteTodo,clickHandler}){
   return(
     <div className="container">
+      <h1>Todo's :</h1>
     {
     todos.map((todo,index)=>{
       return (
-        <Todo key={index} todo={todo} deleteTodo={deleteTodo} index={index}></Todo>
+        <Todo key={index} todo={todo} deleteTodo={deleteTodo} index={index} clickHandler={clickHandler}></Todo>
       )
     })
     }
@@ -57,12 +63,12 @@ function TodoContainer({todos,deleteTodo}){
   )
 }
 
-function Todo({todo,index,deleteTodo}){
+function Todo({todo,index,deleteTodo,clickHandler}){
   return(
   <div className="todo" >
         <p>{todo}</p>
         <div className="actions">
-          <input type="checkbox" />
+          <input type="checkbox" onClick={clickHandler}/>
           <button onClick={()=> deleteTodo(index)} >Delete</button>
         </div>
       </div>
